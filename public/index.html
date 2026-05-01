@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontrol Bot Mineflayer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Kontrol Bot Mineflayer</h1>
+
+    <section class="panel">
+      <h2>Pengaturan Koneksi</h2>
+      <form id="connectForm">
+        <label>Host<br><input type="text" id="host" value="localhost"></label>
+        <label>Port<br><input type="number" id="port" value="25565"></label>
+        <label>Username<br><input type="text" id="username" value="web-bot"></label>
+        <label>Password akun Minecraft (opsional)<br><input type="password" id="password"></label>
+        <label>Password login server (opsional)<br><input type="password" id="loginPassword"></label>
+        <label>Version (opsional)<br><input type="text" id="version" placeholder="auto"></label>
+        <button type="submit">Connect</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Daftar Bot</h2>
+      <label>Pilih Bot<br>
+        <select id="botSelect"><option value="">Tidak ada bot</option></select>
+      </label>
+      <button id="disconnectButton" class="secondary">Disconnect Bot</button>
+    </section>
+
+    <section class="panel">
+      <h2>Kontrol Bot</h2>
+      <div class="controls-grid">
+        <button data-command="forward_on">Maju</button>
+        <button data-command="back_on">Mundur</button>
+        <button data-command="left_on">Kiri</button>
+        <button data-command="right_on">Kanan</button>
+        <button data-command="jump">Lompat</button>
+        <button data-command="sprint_on">Sprint</button>
+        <button data-command="swing">Ayunkan</button>
+      </div>
+      <p class="hint">Pilih bot terlebih dahulu, lalu tekan tombol untuk mengontrol.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Chat Bot</h2>
+      <form id="chatForm">
+        <input id="chatInput" type="text" placeholder="Tulis pesan..." autocomplete="off">
+        <button type="submit">Kirim</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Inventory Viewer</h2>
+      <div class="inventory-panel">
+        <table id="inventoryTable">
+          <thead>
+            <tr><th>Slot</th><th>Item</th><th>Jumlah</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p id="inventoryHint">Pilih bot untuk melihat inventory.</p>
+      </div>
+    </section>
+
+    <section class="panel status-panel">
+      <h2>Status</h2>
+      <div id="statusLog" class="status-log"></div>
+    </section>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>
