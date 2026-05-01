@@ -18,18 +18,36 @@ function logStatus(message) {
 
 function updateBotSelect(bots) {
   const currentValue = botSelect.value;
-  botSelect.innerHTML = '<option value="">Tidak ada bot</option>';
+  botSelect.innerHTML = '<option value="">Tidak ada bot aktif</option>';
   bots.forEach((bot) => {
     const option = document.createElement('option');
     option.value = bot.id;
-    option.textContent = `${bot.username} (${bot.host}:${bot.port}) [${bot.status}]`;
+
+    let statusEmoji = '❓';
+    let statusText = bot.status;
+    switch (bot.status) {
+      case 'connected':
+        statusEmoji = '🟢';
+        statusText = 'Online';
+        break;
+      case 'connecting':
+        statusEmoji = '🟡';
+        statusText = 'Connecting';
+        break;
+      case 'error':
+        statusEmoji = '🔴';
+        statusText = 'Error';
+        break;
+    }
+
+    option.textContent = `${statusEmoji} ${bot.username} (${bot.host}:${bot.port}) - ${statusText}`;
     botSelect.appendChild(option);
   });
 
   if (bots.length === 0) {
     selectedBotId = '';
     inventoryTableBody.innerHTML = '';
-    inventoryHint.textContent = 'Pilih bot untuk melihat inventory.';
+    inventoryHint.textContent = '📋 Pilih bot untuk melihat inventory';
     return;
   }
 
@@ -119,11 +137,15 @@ controlButtons.forEach((button) => {
   const command = button.dataset.command;
   const emitCommand = () => {
     if (!selectedBotId) {
-      logStatus('Pilih bot terlebih dahulu sebelum mengontrol.');
+      logStatus('❌ Pilih bot terlebih dahulu sebelum mengontrol.');
       return;
     }
     console.log(`Emitting control: ${command} for bot ${selectedBotId}`);
     socket.emit('control', { command, botId: selectedBotId });
+
+    // Visual feedback
+    button.classList.add('active');
+    setTimeout(() => button.classList.remove('active'), 150);
   };
 
   if (command.endsWith('_on')) {

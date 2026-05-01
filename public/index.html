@@ -3,71 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kontrol Bot Mineflayer</title>
+  <title>🚀 Mineflayer Bot Control</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Kontrol Bot Mineflayer</h1>
+    <header class="header">
+      <h1>🚀 Mineflayer Bot Control</h1>
+      <p>Kontrol bot Minecraft Anda dari web dengan mudah dan real-time</p>
+    </header>
 
     <section class="panel">
-      <h2>Pengaturan Koneksi</h2>
-      <form id="connectForm">
-        <label>Host<br><input type="text" id="host" value="localhost"></label>
-        <label>Port<br><input type="number" id="port" value="25565"></label>
-        <label>Username<br><input type="text" id="username" value="web-bot"></label>
-        <label>Password akun Minecraft (opsional)<br><input type="password" id="password"></label>
-        <label>Password login server (opsional)<br><input type="password" id="loginPassword"></label>
-        <label>Version (opsional)<br><input type="text" id="version" placeholder="auto"></label>
-        <button type="submit">Connect</button>
+      <h2>🔗 Koneksi Server</h2>
+      <form id="connectForm" class="form-grid">
+        <div class="form-group">
+          <label>Host Server</label>
+          <input type="text" id="host" value="localhost" placeholder="localhost">
+        </div>
+        <div class="form-group">
+          <label>Port Server</label>
+          <input type="number" id="port" value="25565" placeholder="25565">
+        </div>
+        <div class="form-group">
+          <label>Username Bot</label>
+          <input type="text" id="username" value="web-bot" placeholder="web-bot">
+        </div>
+        <div class="form-group">
+          <label>Password Akun (opsional)</label>
+          <input type="password" id="password" placeholder="Kosongkan jika offline">
+        </div>
+        <div class="form-group">
+          <label>Password Login Server (opsional)</label>
+          <input type="password" id="loginPassword" placeholder="Untuk server dengan auth">
+        </div>
+        <div class="form-group">
+          <label>Version Minecraft (opsional)</label>
+          <input type="text" id="version" placeholder="auto">
+        </div>
       </form>
-    </section>
-
-    <section class="panel">
-      <h2>Daftar Bot</h2>
-      <label>Pilih Bot<br>
-        <select id="botSelect"><option value="">Tidak ada bot</option></select>
-      </label>
-      <button id="disconnectButton" class="secondary">Disconnect Bot</button>
-    </section>
-
-    <section class="panel">
-      <h2>Kontrol Bot</h2>
-      <div class="controls-grid">
-        <button data-command="forward_on">Maju</button>
-        <button data-command="back_on">Mundur</button>
-        <button data-command="left_on">Kiri</button>
-        <button data-command="right_on">Kanan</button>
-        <button data-command="jump">Lompat</button>
-        <button data-command="sprint_on">Sprint</button>
-        <button data-command="swing">Ayunkan</button>
+      <div class="button-group">
+        <button type="submit" form="connectForm">🔗 Connect Bot</button>
       </div>
-      <p class="hint">Pilih bot terlebih dahulu, lalu tekan tombol untuk mengontrol.</p>
     </section>
 
     <section class="panel">
-      <h2>Chat Bot</h2>
-      <form id="chatForm">
-        <input id="chatInput" type="text" placeholder="Tulis pesan..." autocomplete="off">
-        <button type="submit">Kirim</button>
+      <h2>🤖 Daftar Bot</h2>
+      <div class="bot-selector">
+        <div class="form-group" style="flex: 1;">
+          <label>Pilih Bot Aktif</label>
+          <select id="botSelect">
+            <option value="">Tidak ada bot aktif</option>
+          </select>
+        </div>
+        <button id="disconnectButton" class="secondary danger">❌ Disconnect</button>
+      </div>
+      <p class="hint">
+        <strong>💡 Tip:</strong> Pilih bot dari dropdown sebelum menggunakan kontrol di bawah.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>🎮 Kontrol Bot</h2>
+      <div class="controls-grid">
+        <button class="control-btn" data-command="forward_on">⬆️ Maju</button>
+        <button class="control-btn" data-command="back_on">⬇️ Mundur</button>
+        <button class="control-btn" data-command="left_on">⬅️ Kiri</button>
+        <button class="control-btn" data-command="right_on">➡️ Kanan</button>
+        <button class="control-btn" data-command="jump">🦘 Lompat</button>
+        <button class="control-btn" data-command="sprint_on">🏃 Sprint</button>
+        <button class="control-btn" data-command="swing">⚔️ Ayunkan</button>
+      </div>
+      <p class="hint">
+        <strong>🎯 Cara pakai:</strong> Klik dan tahan tombol gerak untuk maju/mundur/kiri/kanan. Lepaskan untuk berhenti.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>💬 Chat Bot</h2>
+      <form id="chatForm" class="chat-form">
+        <input id="chatInput" type="text" placeholder="Ketik pesan untuk bot..." autocomplete="off">
+        <button type="submit">📤 Kirim</button>
       </form>
     </section>
 
     <section class="panel">
-      <h2>Inventory Viewer</h2>
+      <h2>🎒 Inventory Viewer</h2>
       <div class="inventory-panel">
         <table id="inventoryTable">
           <thead>
-            <tr><th>Slot</th><th>Item</th><th>Jumlah</th></tr>
+            <tr>
+              <th>📦 Slot</th>
+              <th>🛠️ Item</th>
+              <th>🔢 Jumlah</th>
+            </tr>
           </thead>
           <tbody></tbody>
         </table>
-        <p id="inventoryHint">Pilih bot untuk melihat inventory.</p>
+        <p id="inventoryHint" style="text-align: center; padding: 20px; color: var(--text-muted);">
+          📋 Pilih bot untuk melihat inventory
+        </p>
       </div>
     </section>
 
     <section class="panel status-panel">
-      <h2>Status</h2>
+      <h2>📊 Status & Log</h2>
       <div id="statusLog" class="status-log"></div>
     </section>
   </div>
