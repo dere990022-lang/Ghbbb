@@ -81,8 +81,9 @@ function createBot(options, socket) {
     if (socket) socket.emit('botConnected', { id: botId, username: bot.username });
     sendInventory(botId);
 
-    // Set bot to look forward
+    // Set bot to look forward and enable physics
     bot.look(0, 0);
+    bot.physicsEnabled = true;
 
     const registerPassword = bots[botId].registerPassword;
     const loginPassword = bots[botId].loginPassword;
@@ -181,12 +182,22 @@ function handleControl(command, botId) {
       bot.setControlState('right', false);
       break;
     case 'jump':
-      if (bot.onGround) {
-        bot.setControlState('jump', true);
-        setTimeout(() => bot.setControlState('jump', false), 150);
-      } else {
-        console.log(`Bot not on ground, cannot jump`);
-      }
+      console.log(`Jump attempt - onGround: ${bot.onGround}, position: ${bot.position.x.toFixed(2)},${bot.position.y.toFixed(2)},${bot.position.z.toFixed(2)}, velocity: ${bot.velocity.y.toFixed(2)}`);
+      // Allow jump even if not on ground, but log the state
+      bot.setControlState('jump', true);
+      setTimeout(() => bot.setControlState('jump', false), 150);
+      break;
+    case 'force_jump':
+      console.log(`Force jump - ignoring ground check`);
+      bot.setControlState('jump', true);
+      setTimeout(() => bot.setControlState('jump', false), 200);
+      // Try again after a short delay for double jump effect
+      setTimeout(() => {
+        if (bots[botId] && bots[botId].bot) {
+          bots[botId].bot.setControlState('jump', true);
+          setTimeout(() => bots[botId].bot.setControlState('jump', false), 200);
+        }
+      }, 100);
       break;
     case 'sprint_on':
       bot.setControlState('sprint', true);
@@ -237,8 +248,18 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
+  socket.on('getBotStatus', (botId) => {
+    const bot = getBotById(botId);
+    if (bot) {
+      socket.emit('botStatus', {
+        botId,
+        status: 'connected',
+        position: bot.position,
+        onGround: bot.onGround,
+        health: bot.health,
+        maxHealth: 20 // Default max health
+      });
+    }
   });
 });
 

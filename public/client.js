@@ -7,8 +7,11 @@ const chatInput = document.getElementById('chatInput');
 const botSelect = document.getElementById('botSelect');
 const inventoryTableBody = document.querySelector('#inventoryTable tbody');
 const inventoryHint = document.getElementById('inventoryHint');
-const controlButtons = document.querySelectorAll('[data-command]');
-let selectedBotId = '';
+const botInfo = document.getElementById('botInfo');
+const botStatus = document.getElementById('botStatus');
+const botPosition = document.getElementById('botPosition');
+const botOnGround = document.getElementById('botOnGround');
+const botHealth = document.getElementById('botHealth');
 
 function logStatus(message) {
   const entry = document.createElement('div');
@@ -48,6 +51,7 @@ function updateBotSelect(bots) {
     selectedBotId = '';
     inventoryTableBody.innerHTML = '';
     inventoryHint.textContent = '📋 Pilih bot untuk melihat inventory';
+    botInfo.style.display = 'none';
     return;
   }
 
@@ -58,21 +62,28 @@ function updateBotSelect(bots) {
     botSelect.value = bots[0].id;
     selectedBotId = bots[0].id;
   }
+
+  // Show bot info if bot is selected
+  updateBotInfo();
 }
 
-function renderInventory(botId, inventory) {
-  if (botId !== selectedBotId) return;
-  inventoryTableBody.innerHTML = inventory
-    .sort((a, b) => a.slot - b.slot)
-    .map((item) => `<tr><td>${item.slot}</td><td>${item.displayName}</td><td>${item.count}</td></tr>`)
-    .join('');
-
-  if (inventory.length === 0) {
-    inventoryHint.textContent = 'Inventory kosong atau belum tersedia.';
-  } else {
-    inventoryHint.textContent = '';
+function updateBotInfo() {
+  if (!selectedBotId) {
+    botInfo.style.display = 'none';
+    return;
   }
+
+  botInfo.style.display = 'block';
+  // Request bot status update from server
+  socket.emit('getBotStatus', selectedBotId);
 }
+
+// Auto refresh bot status every 2 seconds
+setInterval(() => {
+  if (selectedBotId) {
+    socket.emit('getBotStatus', selectedBotId);
+  }
+}, 2000);
 
 socket.on('status', (data) => {
   logStatus(data.text);
@@ -90,8 +101,13 @@ socket.on('botConnected', (data) => {
   logStatus(`Bot tersambung sebagai ${data.username}`);
 });
 
-socket.on('botError', (data) => {
-  logStatus(`Error: ${data.error}`);
+socket.on('botStatus', (data) => {
+  if (data.botId !== selectedBotId) return;
+
+  botStatus.textContent = data.status;
+  botPosition.textContent = `${data.position.x.toFixed(1)}, ${data.position.y.toFixed(1)}, ${data.position.z.toFixed(1)}`;
+  botOnGround.textContent = data.onGround ? 'Ya' : 'Tidak';
+  botHealth.textContent = `${data.health.toFixed(1)}/${data.maxHealth}`;
 });
 
 connectForm.addEventListener('submit', (event) => {
@@ -120,6 +136,7 @@ botSelect.addEventListener('change', () => {
   selectedBotId = botSelect.value;
   inventoryTableBody.innerHTML = '';
   inventoryHint.textContent = selectedBotId ? 'Memuat inventory...' : 'Pilih bot untuk melihat inventory.';
+  updateBotInfo();
 });
 
 chatForm.addEventListener('submit', (event) => {

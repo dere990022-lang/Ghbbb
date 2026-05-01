@@ -442,6 +442,36 @@ button.danger:hover {
   border-radius: 3px;
 }
 
-.status-log::-webkit-scrollbar-thumb:hover {
+.bot-info {
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-top: 16px;
+  border: 1px solid var(--border-color);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
   background: var(--bg-tertiary);
+  border-radius: var(--radius);
+}
+
+.info-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.info-value {
+  font-family: 'Monaco', monospace;
+  color: var(--text-primary);
+  font-weight: 500;
 }

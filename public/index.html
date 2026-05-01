@@ -61,6 +61,26 @@
         </div>
         <button id="disconnectButton" class="secondary danger">❌ Disconnect</button>
       </div>
+      <div id="botInfo" class="bot-info" style="display: none;">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Status:</span>
+            <span id="botStatus" class="info-value">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Posisi:</span>
+            <span id="botPosition" class="info-value">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Ground:</span>
+            <span id="botOnGround" class="info-value">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Health:</span>
+            <span id="botHealth" class="info-value">-</span>
+          </div>
+        </div>
+      </div>
       <p class="hint">
         <strong>💡 Tip:</strong> Pilih bot dari dropdown sebelum menggunakan kontrol di bawah.
       </p>
@@ -74,6 +94,7 @@
         <button class="control-btn" data-command="left_on">⬅️ Kiri</button>
         <button class="control-btn" data-command="right_on">➡️ Kanan</button>
         <button class="control-btn" data-command="jump">🦘 Lompat</button>
+        <button class="control-btn" data-command="force_jump">🚀 Force Jump</button>
         <button class="control-btn" data-command="sprint_on">🏃 Sprint</button>
         <button class="control-btn" data-command="swing">⚔️ Ayunkan</button>
       </div>
