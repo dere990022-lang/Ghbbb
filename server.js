@@ -80,6 +80,9 @@ function createBot(options, socket) {
     if (socket) socket.emit('botConnected', { id: botId, username: bot.username });
     sendInventory(botId);
 
+    // Set bot to look forward
+    bot.look(0, 0);
+
     const loginPassword = bots[botId].loginPassword;
     if (loginPassword) {
       setTimeout(() => {
@@ -125,7 +128,12 @@ function getBotById(botId) {
 
 function handleControl(command, botId) {
   const bot = getBotById(botId);
-  if (!bot) return;
+  if (!bot) {
+    console.log(`Bot ${botId} not found for command ${command}`);
+    return;
+  }
+
+  console.log(`Handling control: ${command} for bot ${botId}, spawned: ${bot.spawned}, onGround: ${bot.onGround}`);
 
   switch (command) {
     case 'forward_on':
@@ -153,8 +161,12 @@ function handleControl(command, botId) {
       bot.setControlState('right', false);
       break;
     case 'jump':
-      bot.setControlState('jump', true);
-      setTimeout(() => bot.setControlState('jump', false), 150);
+      if (bot.onGround) {
+        bot.setControlState('jump', true);
+        setTimeout(() => bot.setControlState('jump', false), 150);
+      } else {
+        console.log(`Bot not on ground, cannot jump`);
+      }
       break;
     case 'sprint_on':
       bot.setControlState('sprint', true);

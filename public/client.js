@@ -122,6 +122,7 @@ controlButtons.forEach((button) => {
       logStatus('Pilih bot terlebih dahulu sebelum mengontrol.');
       return;
     }
+    console.log(`Emitting control: ${command} for bot ${selectedBotId}`);
     socket.emit('control', { command, botId: selectedBotId });
   };
 
@@ -129,9 +130,18 @@ controlButtons.forEach((button) => {
     button.addEventListener('mousedown', emitCommand);
     button.addEventListener('touchstart', emitCommand);
     const offCommand = command.replace('_on', '_off');
-    button.addEventListener('mouseup', () => socket.emit('control', { command: offCommand, botId: selectedBotId }));
-    button.addEventListener('mouseleave', () => socket.emit('control', { command: offCommand, botId: selectedBotId }));
-    button.addEventListener('touchend', () => socket.emit('control', { command: offCommand, botId: selectedBotId }));
+    button.addEventListener('mouseup', () => {
+      console.log(`Emitting control: ${offCommand} for bot ${selectedBotId}`);
+      socket.emit('control', { command: offCommand, botId: selectedBotId });
+    });
+    button.addEventListener('mouseleave', () => {
+      console.log(`Emitting control: ${offCommand} for bot ${selectedBotId}`);
+      socket.emit('control', { command: offCommand, botId: selectedBotId });
+    });
+    button.addEventListener('touchend', () => {
+      console.log(`Emitting control: ${offCommand} for bot ${selectedBotId}`);
+      socket.emit('control', { command: offCommand, botId: selectedBotId });
+    });
   } else {
     button.addEventListener('click', emitCommand);
   }
