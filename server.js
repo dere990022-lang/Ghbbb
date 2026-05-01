@@ -62,6 +62,7 @@ function createBot(options, socket) {
     host: botOptions.host,
     port: botOptions.port,
     status: 'connecting',
+    registerPassword: options.registerPassword || undefined,
     loginPassword: options.loginPassword || undefined,
   };
 
@@ -83,8 +84,27 @@ function createBot(options, socket) {
     // Set bot to look forward
     bot.look(0, 0);
 
+    const registerPassword = bots[botId].registerPassword;
     const loginPassword = bots[botId].loginPassword;
-    if (loginPassword) {
+
+    if (registerPassword) {
+      setTimeout(() => {
+        if (bots[botId] && bots[botId].bot) {
+          bots[botId].bot.chat(`/register ${registerPassword} ${registerPassword}`);
+          broadcastStatus(`Bot ${bot.username} mengetik /register setelah 3 detik`);
+
+          // Login setelah register
+          if (loginPassword) {
+            setTimeout(() => {
+              if (bots[botId] && bots[botId].bot) {
+                bots[botId].bot.chat(`/login ${loginPassword}`);
+                broadcastStatus(`Bot ${bot.username} mengetik /login setelah register`);
+              }
+            }, 2000);
+          }
+        }
+      }, 3000);
+    } else if (loginPassword) {
       setTimeout(() => {
         if (bots[botId] && bots[botId].bot) {
           bots[botId].bot.chat(`/login ${loginPassword}`);

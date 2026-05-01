@@ -102,6 +102,7 @@ connectForm.addEventListener('submit', (event) => {
     port: document.getElementById('port').value,
     username: document.getElementById('username').value,
     password: document.getElementById('password').value,
+    registerPassword: document.getElementById('registerPassword').value,
     loginPassword: document.getElementById('loginPassword').value,
     version: document.getElementById('version').value || false,
   });
